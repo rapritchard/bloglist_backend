@@ -1,0 +1,9 @@
+post http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Test Blog",
+  "author": "Test Author",
+  "url": "www.google.com",
+  "likes": 5
+}
