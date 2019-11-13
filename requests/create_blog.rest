@@ -2,8 +2,8 @@ post http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-  "title": "Test Blog",
-  "author": "Test Author",
-  "url": "www.google.com",
-  "likes": 5
+  "title": "First class tests",
+  "author": "Robert C. Martin",
+  "url": "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
+  "likes": 10
 }

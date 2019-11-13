@@ -118,17 +118,17 @@ describe('mostLikes', () => {
     });
   });
 
-  // test('should return same author with a blog count of 1 if only one blog provided', () => {
-  //   const result = listHelper.mostLikes([blogs[0]]);
-  //   expect(result).toEqual({
-  //     author: 'Michael Chan',
-  //     likes: 7,
-  //   });
-  // });
+  test('should return same author with a blog count of 1 if only one blog provided', () => {
+    const result = listHelper.mostLikes([blogs[0]]);
+    expect(result).toEqual({
+      author: 'Michael Chan',
+      likes: 7,
+    });
+  });
 
-  // test('should return null if blog list is empty', () => {
-  //   const result = listHelper.mostLikes([]);
-  //   expect(result).toEqual(null);
-  // });
+  test('should return null if blog list is empty', () => {
+    const result = listHelper.mostLikes([]);
+    expect(result).toEqual(null);
+  });
 
 });

@@ -33,7 +33,7 @@ const mostLikes = (blogs) => {
     }]);
   }, []);
 
-  if (authorLikes) return _.maxBy(authorLikes, 'likes');
+  return _.maxBy(authorLikes, 'likes');
 };
 
 module.exports = {
