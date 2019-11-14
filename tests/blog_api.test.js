@@ -36,6 +36,12 @@ describe('When there is initially some blogs saved', () => {
       'React patterns',
     );
   });
+
+  test('should have the unique identifier property named id', async () => {
+    const response = await api.get('/api/blogs');
+
+    expect(response.body[0].id).toBeDefined();
+  });
 });
 
 describe('Addition of a new blog', () => {
@@ -119,10 +125,57 @@ describe('Addition of a new blog', () => {
   });
 });
 
-test('should have the unique identifier property named id', async () => {
-  const response = await api.get('/api/blogs');
+describe('When removing a blog post resource', () => {
+  test('should remove resource when provided a valid ID', async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const blogToDelete = blogsAtStart[0];
 
-  expect(response.body[0].id).toBeDefined();
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204);
+
+    const blogsAtEnd = await helper.blogsInDb();
+
+    expect(blogsAtEnd.length).toBe(helper.initialBlogs.length - 1);
+    expect(blogsAtEnd).toEqual(
+      expect.arrayContaining([
+        expect.not.objectContaining({
+          blogToDelete,
+        }),
+      ]),
+    );
+  });
+});
+
+describe('When updating a blog post', () => {
+  test('should update blog resource with provided data', async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const blogToUpdate = blogsAtStart[0];
+
+    const updatedBlog = {
+      title: blogToUpdate.title,
+      author: blogToUpdate.author,
+      url: blogToUpdate.url,
+      likes: 20,
+    };
+
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(updatedBlog)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd.length).toBe(helper.initialBlogs.length);
+    expect(blogsAtEnd).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: blogToUpdate.id,
+          ...updatedBlog,
+        }),
+      ]),
+    );
+  });
 });
 
 afterAll(() => {
