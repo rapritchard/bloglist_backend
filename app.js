@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 const app = express();
 const cors = require('cors');
+const userRouter = require('./controllers/users');
 const blogsRouter = require('./controllers/blogs');
 const config = require('./utils/config');
 const middleware = require('./utils/middleware');
@@ -24,6 +25,7 @@ app.use(bodyParser.json());
 // logs all requests to the server
 app.use(middleware.requestLogger);
 
+app.use('/api/users', userRouter);
 app.use('/api/blogs', blogsRouter);
 
 // handler of requests with result to errors
