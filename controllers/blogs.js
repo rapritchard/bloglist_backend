@@ -56,22 +56,21 @@ blogsRouter.put('/:id', async (request, response, next) => {
 });
 
 blogsRouter.delete('/:id', async (request, response, next) => {
+  const blogId = request.params.id;
   try {
     const decodedToken = jwt.verify(request.token, process.env.SECRET);
     if (!request.token || !decodedToken.id) {
       return response.status(401).json({ error: 'Login token missing or invalid' });
     }
 
-    const blog = await Blog.findById(request.params.id);
+    const { user } = await Blog.findById(blogId);
 
-    const user = await User.findById(decodedToken.id);
-
-    if (blog.user.toString() === user.id) {
-      await blog.remove();
-      response.status(204).end();
-    } else {
+    if (user && user.toString() !== decodedToken.id) {
       return response.status(401).json({ error: 'You do not have the permissions to complete this action' });
     }
+
+    await Blog.findByIdAndRemove(blogId);
+    response.status(204).end();
   } catch (exception) {
     next(exception);
   }
