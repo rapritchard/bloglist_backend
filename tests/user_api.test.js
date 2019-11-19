@@ -13,9 +13,9 @@ describe('When there is initially one user in the database', () => {
     await user.save();
   });
 
-  test('should fail at creating a user if username already taken with proper err msg', async () => {
+  test('should return an error if username already taken', async () => {
     const usersAtStart = await helper.usersInDb();
-    
+
     const newUser = {
       username: 'root',
       name: 'Superuser',
@@ -43,8 +43,6 @@ describe('When there is initially one user in the database', () => {
       password: 'bourbon',
     };
 
-    console.log(newUser);
-
     await api
       .post('/api/users')
       .send(newUser)
@@ -57,6 +55,46 @@ describe('When there is initially one user in the database', () => {
 
     const usernames = usersAtEnd.map((u) => u.username);
     expect(usernames).toContain(newUser.username);
+  });
+
+  test('should return an error when supplied a username too short', async () => {
+    const usersAtStart = await helper.usersInDb();
+
+    const newUser = {
+      username: 'ro',
+      password: 'sect',
+    };
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/);
+
+    expect(result.body.error).toContain('`username` (`ro`) is shorter than the minimum');
+
+    const usersAtEnd = await helper.usersInDb();
+    expect(usersAtEnd.length).toBe(usersAtStart.length);
+  });
+
+  test('should return an error when supplied a password too short', async () => {
+    const usersAtStart = await helper.usersInDb();
+
+    const newUser = {
+      username: 'robby',
+      password: 'se',
+    };
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/);
+
+    expect(result.body.error).toContain('Password is required and must be at least 3 characters');
+
+    const usersAtEnd = await helper.usersInDb();
+    expect(usersAtEnd.length).toBe(usersAtStart.length);
   });
 });
 

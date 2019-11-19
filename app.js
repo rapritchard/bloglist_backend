@@ -25,6 +25,7 @@ app.use(cors());
 app.use(bodyParser.json());
 // logs all requests to the server
 app.use(middleware.requestLogger);
+app.use(middleware.tokenExtractor);
 
 app.use('/api/login', loginRouter)
 app.use('/api/users', userRouter);

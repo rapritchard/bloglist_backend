@@ -1,7 +1,9 @@
 post http://localhost:3001/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG5ueWJveTc5IiwiaWQiOiI1ZGQzMTAzZDg1ODU5OTI3ZDAxODQzYjQiLCJpYXQiOjE1NzQxOTA4NTB9.bVkrn4l2GH0LWcuwrycU6R202l1Ljcosysrc-SIdkjw
 
 {
+  "title": "Test Definitions",
   "author": "Robert C. Martin",
   "url": "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
   "likes": 10
